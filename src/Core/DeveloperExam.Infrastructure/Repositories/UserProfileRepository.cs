@@ -27,6 +27,4 @@ public class UserProfileRepository : IUserProfileRepository
 
     public async Task<IEnumerable<UserProfile>> GetAllAsync(CancellationToken cancellationToken)
         => await _context.UserProfiles.AsNoTracking().ToListAsync(cancellationToken);
-
-
 }

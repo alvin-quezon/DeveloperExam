@@ -1,9 +1,9 @@
 ﻿using Asp.Versioning.Builder;
 using Asp.Versioning;
-using DeveloperExam.Application.UserProfile.Commands.CreateUserProfile;
+using DeveloperExam.Application.UserProfiles.Commands.CreateUserProfile;
 using MediatR;
-using DeveloperExam.Application.UserProfile.Commands.UpdateUserProfile;
-using DeveloperExam.Application.UserProfile.Commands.DeleteUserProfile;
+using DeveloperExam.Application.UserProfiles.Commands.UpdateUserProfile;
+using DeveloperExam.Application.UserProfiles.Commands.DeleteUserProfile;
 
 namespace DeveloperExam.Api.Endpoints.UserProfile.Commands;
 
@@ -12,7 +12,7 @@ public static class UserProfileCommandEndpoint
     public static void UserProfileCommandEndpoints(this IEndpointRouteBuilder builder)
     {
         ApiVersionSet apiVersionSet = builder.NewApiVersionSet().HasApiVersion(new ApiVersion(1)).ReportApiVersions().Build();
-        RouteGroupBuilder groupRouteBuilder = builder.MapGroup("api/v{apiVersion:apiVersion}/command/userprofile").WithApiVersionSet(apiVersionSet);
+        RouteGroupBuilder groupRouteBuilder = builder.MapGroup("api/v{apiVersion:apiVersion}/command/userprofile").WithApiVersionSet(apiVersionSet).WithTags("User Profile Commands");
 
         groupRouteBuilder.MapPost(string.Empty, async (CreateUserProfileRequest request, ISender sender, CancellationToken cancellationToken) =>
         {

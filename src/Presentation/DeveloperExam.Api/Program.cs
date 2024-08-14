@@ -1,9 +1,11 @@
 using Asp.Versioning;
+using DeveloperExam.Api.Endpoints.RunningActivity.Commands;
+using DeveloperExam.Api.Endpoints.RunningActivity.Queries;
 using DeveloperExam.Api.Endpoints.UserProfile.Commands;
 using DeveloperExam.Api.Endpoints.UserProfile.Queries;
 using DeveloperExam.Api.Middleware;
 using DeveloperExam.Application.Behaviors;
-using DeveloperExam.Application.UserProfile.Queries.GetUserProfileById;
+using DeveloperExam.Application.UserProfiles.Queries.GetUserProfileById;
 using DeveloperExam.Domain.Abstractions;
 using DeveloperExam.Infrastructure.Context;
 using DeveloperExam.Infrastructure.Repositories;
@@ -11,9 +13,10 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-var applicationProjectAssembly = typeof(GetUserProfileByIdResponse).Assembly;
+var applicationProjectAssembly = typeof(GetUserProfileByIdQuery).Assembly;
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
@@ -30,6 +33,7 @@ builder.Services.AddCors();
 
 // Core Services
 builder.Services.AddTransient<IUserProfileRepository, UserProfileRepository>();
+builder.Services.AddTransient<IRunningActivityRepository, RunningActivityRepository>();
 
 // Api versioning
 builder.Services.AddApiVersioning(options =>
@@ -42,6 +46,14 @@ builder.Services.AddApiVersioning(options =>
     options.GroupNameFormat = "'v'V";
     options.SubstituteApiVersionInUrl = true;
 });
+
+// Serilog
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 var app = builder.Build();
 
@@ -59,10 +71,15 @@ if (app.Environment.IsDevelopment())
     });
 }
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
-// Add endpoints
+// Build app endpoints for user profiles
 app.UserProfileQueryEndpoints();
 app.UserProfileCommandEndpoints();
+
+// Build app endpoints for running activities
+app.RunningActivityQueryEndpoints();
+app.RunningActivityCommandEndpoints();
 
 app.Run();

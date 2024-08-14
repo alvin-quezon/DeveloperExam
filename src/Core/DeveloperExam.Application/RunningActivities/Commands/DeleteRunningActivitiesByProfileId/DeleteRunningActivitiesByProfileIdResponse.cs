@@ -1,0 +1,3 @@
+﻿namespace DeveloperExam.Application.RunningActivities.Commands.DeleteRunningActivitiesByProfileId;
+
+public sealed record DeleteRunningActivitiesByProfileIdResponse(Guid UserProfileId);
