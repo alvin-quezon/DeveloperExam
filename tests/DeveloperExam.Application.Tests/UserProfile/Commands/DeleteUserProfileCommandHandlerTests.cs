@@ -1,5 +1,6 @@
 ﻿using DeveloperExam.Application.UserProfiles.Commands.DeleteUserProfile;
 using Moq;
+using Shouldly;
 using DeveloperExam.Domain.Abstractions;
 using User = DeveloperExam.Domain.Entities.UserProfile;
 using DeveloperExam.Domain.Exceptions;
@@ -27,9 +28,9 @@ namespace DeveloperExam.Application.Tests.UserProfile.Commands
             var result = handler.Handle(command, new CancellationToken()).Result;
 
             // Assert
-            Assert.True(validate.IsValid);
-            Assert.True(result.Success);
-            Assert.Equal("User profile deleted successfully", result.Message);
+            validate.IsValid.ShouldBeTrue();
+            result.Success.ShouldBeTrue();
+            result.Message.ShouldBe("User profile deleted successfully");
         }
 
         [Fact]
@@ -50,9 +51,9 @@ namespace DeveloperExam.Application.Tests.UserProfile.Commands
             Func<Task> act = async () => await handler.Handle(command, new CancellationToken());
 
             // Assert
-            Assert.True(validate.IsValid);
-            var exception = Assert.ThrowsAsync<UserProfileNotFoundException>(act);
-            Assert.Contains("not found", exception.Result.Message);
+            validate.IsValid.ShouldBeTrue();
+            var exception = act.ShouldThrowAsync<UserProfileNotFoundException>();
+            exception.Result.Message.ShouldContain("was not found");
         }
     }
 }

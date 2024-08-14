@@ -4,7 +4,7 @@ using DeveloperExam.Domain.Abstractions;
 
 namespace DeveloperExam.Application.RunningActivities.Queries.GetAllRunningActivities;
 
-internal sealed class GetAllRunningActivitiesQueryHandler : IQueryHandler<GetAllRunningActivitiesQuery, IEnumerable<RunningActivityResponse>>
+public sealed class GetAllRunningActivitiesQueryHandler : IQueryHandler<GetAllRunningActivitiesQuery, IEnumerable<RunningActivityResponse>>
 {
     private readonly IRunningActivityRepository _runningActivityRepository;
 

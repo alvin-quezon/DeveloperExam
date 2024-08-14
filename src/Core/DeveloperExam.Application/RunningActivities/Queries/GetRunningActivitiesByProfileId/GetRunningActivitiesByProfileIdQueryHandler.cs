@@ -3,7 +3,7 @@ using DeveloperExam.Application.Dto;
 using DeveloperExam.Domain.Abstractions;
 
 namespace DeveloperExam.Application.RunningActivities.Queries.GetRunningActivitiesByProfileId;
-internal sealed class GetRunningActivitiesByProfileIdQueryHandler : IQueryHandler<GetRunningActivitiesByProfileIdQuery, IEnumerable<RunningActivityResponse>>
+public sealed class GetRunningActivitiesByProfileIdQueryHandler : IQueryHandler<GetRunningActivitiesByProfileIdQuery, IEnumerable<RunningActivityResponse>>
 {
     private readonly IRunningActivityRepository _runningActivityRepository;
 

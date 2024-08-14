@@ -1,9 +1,11 @@
-﻿using DeveloperExam.Domain.Abstractions;
+﻿using DeveloperExam.Application.Abstractions.Messaging;
+using DeveloperExam.Application.Dto;
+using DeveloperExam.Domain.Abstractions;
 using DeveloperExam.Domain.Exceptions;
 
 namespace DeveloperExam.Application.RunningActivities.Commands.DeleteRunningActivitiesByProfileId;
 
-internal sealed class DeleteRunningActivityByProfileIdCommandHandler
+public sealed class DeleteRunningActivityByProfileIdCommandHandler : ICommandHandler<DeleteRunningActivitiesByProfileIdCommand, ServiceResponse>
 {
     private readonly IRunningActivityRepository _runningActivityRepository;
     private readonly IUserProfileRepository _userProfileRepository;
@@ -16,7 +18,7 @@ internal sealed class DeleteRunningActivityByProfileIdCommandHandler
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<DeleteRunningActivitiesByProfileIdResponse> Handle(DeleteRunningActivitiesByProfileIdCommand request, CancellationToken cancellationToken)
+    public async Task<ServiceResponse> Handle(DeleteRunningActivitiesByProfileIdCommand request, CancellationToken cancellationToken)
     {
         var userProfile = await _userProfileRepository.GetByIdAsync(request.UserProfileId);
         if (userProfile is null)
@@ -24,8 +26,11 @@ internal sealed class DeleteRunningActivityByProfileIdCommandHandler
 
         var runningActivities = await _runningActivityRepository.GetRunningActivitiesByUserProfileIdAsync(request.UserProfileId, cancellationToken);
         _runningActivityRepository.DeleteRange(runningActivities);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        var result = await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return new DeleteRunningActivitiesByProfileIdResponse(request.UserProfileId);
+        if (result == 0)
+            return new ServiceResponse(false, "Failed to delete running activities");
+
+        return new ServiceResponse(true);
     }
 }

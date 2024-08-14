@@ -5,7 +5,7 @@ using DeveloperExam.Domain.Exceptions;
 
 namespace DeveloperExam.Application.RunningActivities.Commands.DeleteRunningActivityById;
 
-internal sealed class DeleteRunningActivityByIdCommandHandler : ICommandHandler<DeleteRunningActivityByIdCommand, ServiceResponse>
+public sealed class DeleteRunningActivityByIdCommandHandler : ICommandHandler<DeleteRunningActivityByIdCommand, ServiceResponse>
 {
     private readonly IRunningActivityRepository _runningActivityRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -23,7 +23,9 @@ internal sealed class DeleteRunningActivityByIdCommandHandler : ICommandHandler<
             throw new RunningActivityNotFoundException(request.Id);
 
         _runningActivityRepository.Delete(runningActivity);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        var result = await _unitOfWork.SaveChangesAsync(cancellationToken);
+        if(result == 0)
+            return new ServiceResponse(false, "Failed to delete running activity");
 
         return new ServiceResponse(true, "Running activity deleted successfully");
     }

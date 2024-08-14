@@ -4,7 +4,7 @@ using DeveloperExam.Domain.Abstractions;
 
 namespace DeveloperExam.Application.UserProfiles.Queries.GetAllUserProfiles;
 
-internal sealed class GetAllUserProfilesQueryHandler : IQueryHandler<GetAllUserProfilesQuery, IEnumerable<UserProfileResponse>>
+public sealed class GetAllUserProfilesQueryHandler : IQueryHandler<GetAllUserProfilesQuery, IEnumerable<UserProfileResponse>>
 {
     private readonly IUserProfileRepository _userProfileRepository;
     public GetAllUserProfilesQueryHandler(IUserProfileRepository userProfileRepository)

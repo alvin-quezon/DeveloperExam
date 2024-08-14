@@ -4,6 +4,7 @@ using DeveloperExam.Application.UserProfiles.Commands.CreateUserProfile;
 using MediatR;
 using DeveloperExam.Application.UserProfiles.Commands.UpdateUserProfile;
 using DeveloperExam.Application.UserProfiles.Commands.DeleteUserProfile;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DeveloperExam.Api.Endpoints.UserProfile.Commands;
 
@@ -25,7 +26,7 @@ public static class UserProfileCommandEndpoint
             return Results.Created();
         });
 
-        groupRouteBuilder.MapPut("{id:guid}", async (Guid id, UpdateUserProfileRequest request, ISender sender, CancellationToken cancellationToken) =>
+        groupRouteBuilder.MapPut("{id:guid}", async (Guid id, [FromBody] UpdateUserProfileRequest request, ISender sender, CancellationToken cancellationToken) =>
         {
             var command = new UpdateUserProfileCommand(id, request.Name, request.Weight, request.Height, request.BirthDate);
             var result = await sender.Send(command, cancellationToken);

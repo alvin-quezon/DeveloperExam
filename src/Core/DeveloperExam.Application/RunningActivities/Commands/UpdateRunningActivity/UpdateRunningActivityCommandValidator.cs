@@ -9,11 +9,11 @@ public sealed class UpdateRunningActivityCommandValidator : AbstractValidator<Up
         RuleFor(x => x.Location)
             .NotEmpty().WithMessage("Location is required");
 
-        RuleFor(x => x.End)
-            .NotEmpty().WithMessage("End is required");
-        
         RuleFor(x => x.Start)
-            .NotEmpty().WithMessage("Start is required")
+            .NotEmpty().WithMessage("Start is required");
+        
+        RuleFor(x => x.End)
+            .NotEmpty().WithMessage("End is required")
             .GreaterThan(x => x.Start).WithMessage("End must be greater than Start");
         
         RuleFor(x => x.Distance)

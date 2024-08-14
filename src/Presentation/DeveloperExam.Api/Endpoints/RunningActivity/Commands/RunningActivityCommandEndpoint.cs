@@ -6,6 +6,7 @@ using MediatR;
 using DeveloperExam.Application.RunningActivities.Commands.UpdateRunningActivity;
 using DeveloperExam.Application.RunningActivities.Commands.DeleteRunningActivityById;
 using DeveloperExam.Application.RunningActivities.Commands.DeleteRunningActivitiesByProfileId;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DeveloperExam.Api.Endpoints.RunningActivity.Commands
 {
@@ -27,7 +28,7 @@ namespace DeveloperExam.Api.Endpoints.RunningActivity.Commands
                 return Results.Created();
             });
 
-            groupRouteBuilder.MapPut("{id:guid}", async (Guid id, UpdateRunningActivityRequest request, ISender sender, CancellationToken cancellationToken) =>
+            groupRouteBuilder.MapPut("{id:guid}", async (Guid id, [FromBody] UpdateRunningActivityRequest request, ISender sender, CancellationToken cancellationToken) =>
             {
                 var command = new UpdateRunningActivityCommand(id, request.Location, request.Start, request.End, request.Distance);
                 var result = await sender.Send(command, cancellationToken);

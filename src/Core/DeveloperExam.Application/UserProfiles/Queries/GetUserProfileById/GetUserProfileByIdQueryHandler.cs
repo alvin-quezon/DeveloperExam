@@ -5,7 +5,7 @@ using DeveloperExam.Domain.Exceptions;
 
 namespace DeveloperExam.Application.UserProfiles.Queries.GetUserProfileById;
 
-internal sealed class GetUserProfileByIdQueryHandler : IQueryHandler<GetUserProfileByIdQuery, UserProfileResponse>
+public sealed class GetUserProfileByIdQueryHandler : IQueryHandler<GetUserProfileByIdQuery, UserProfileResponse>
 {
     private readonly IUserProfileRepository _userProfileRepository;
     public GetUserProfileByIdQueryHandler(IUserProfileRepository userProfileRepository)

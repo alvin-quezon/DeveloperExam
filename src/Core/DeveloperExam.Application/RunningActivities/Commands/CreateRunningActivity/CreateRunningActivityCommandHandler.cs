@@ -6,7 +6,7 @@ using Activity = DeveloperExam.Domain.Entities.RunningActivity;
 
 namespace DeveloperExam.Application.RunningActivities.Commands.CreateRunningActivity;
 
-internal sealed class CreateRunningActivityCommandHandler : ICommandHandler<CreateRunningActivityCommand, ServiceResponse>
+public sealed class CreateRunningActivityCommandHandler : ICommandHandler<CreateRunningActivityCommand, ServiceResponse>
 {
     private readonly IRunningActivityRepository _runningActivityRepository;
     private readonly IUserProfileRepository _userProfileRepository;
@@ -27,7 +27,11 @@ internal sealed class CreateRunningActivityCommandHandler : ICommandHandler<Crea
 
         var runningActivity = new Activity(request.UserProfileId, request.Location, request.Start, request.End, request.Distance);
         await _runningActivityRepository.AddAsync(runningActivity);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        var result = await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        if (result == 0)
+            return new ServiceResponse(false, "Failed to create running activity");
+
         return new ServiceResponse(true, $"Running activity created successfully for user {request.UserProfileId}");
     }
 }

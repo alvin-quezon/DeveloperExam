@@ -5,7 +5,7 @@ using DeveloperExam.Domain.Exceptions;
 
 namespace DeveloperExam.Application.RunningActivities.Queries.GetRunningActivityById;
 
-internal sealed class GetRunningActivityByIdQueryHandler : IQueryHandler<GetRunningActivityByIdQuery, RunningActivityResponse>
+public sealed class GetRunningActivityByIdQueryHandler : IQueryHandler<GetRunningActivityByIdQuery, RunningActivityResponse>
 {
     private readonly IRunningActivityRepository _runningActivityRepository;
     public GetRunningActivityByIdQueryHandler(IRunningActivityRepository runningActivityRepository)

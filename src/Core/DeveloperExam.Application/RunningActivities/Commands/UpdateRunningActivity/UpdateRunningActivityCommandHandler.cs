@@ -5,7 +5,7 @@ using DeveloperExam.Domain.Exceptions;
 
 namespace DeveloperExam.Application.RunningActivities.Commands.UpdateRunningActivity;
 
-internal sealed class UpdateRunningActivityCommandHandler : ICommandHandler<UpdateRunningActivityCommand, ServiceResponse>
+public sealed class UpdateRunningActivityCommandHandler : ICommandHandler<UpdateRunningActivityCommand, ServiceResponse>
 {
     private readonly IRunningActivityRepository _runningActivityRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -28,7 +28,9 @@ internal sealed class UpdateRunningActivityCommandHandler : ICommandHandler<Upda
         runningActivity.Distance = request.Distance;
 
         _runningActivityRepository.Update(runningActivity);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        var result = await _unitOfWork.SaveChangesAsync(cancellationToken);
+        if (result == 0)
+            return new ServiceResponse(false, "Failed to update running activity");
 
         return new ServiceResponse(true, "Running activity updated");
     }
